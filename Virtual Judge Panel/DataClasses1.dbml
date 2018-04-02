@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Database" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True" SettingsObjectName="Virtual_Judge_Panel.Properties.Settings" SettingsPropertyName="DatabaseConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.account_type" Member="account_types">
+    <Type Name="account_type">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="types" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="account_type_user" Member="users" ThisKey="Id" OtherKey="account_type_id" Type="user" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[user]" Member="users">
+    <Type Name="user">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="account_type_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="img_path" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="security_question" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="projects_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="user_Project" Member="Projects" ThisKey="Id" OtherKey="studentId" Type="Project" />
+      <Association Name="account_type_user" Member="account_type" ThisKey="account_type_id" OtherKey="Id" Type="account_type" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Rating" Member="Ratings">
+    <Type Name="Rating">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="projectid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="rating" Member="rating1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="uid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Project_Rating" Member="Project" ThisKey="projectid" OtherKey="Id" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.event" Member="events">
+    <Type Name="event">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="startdate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="enddate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="event_eventCategory" Member="eventCategories" ThisKey="Id" OtherKey="eventid" Type="eventCategory" />
+    </Type>
+  </Table>
+  <Table Name="dbo.eventCategory" Member="eventCategories">
+    <Type Name="eventCategory">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="categoryname" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="eventid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="eventCategory_Project" Member="Projects" ThisKey="Id" OtherKey="categoryId" Type="Project" />
+      <Association Name="event_eventCategory" Member="event" ThisKey="eventid" OtherKey="Id" Type="event" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Comment" Member="Comments">
+    <Type Name="Comment">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="comment_text" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="project_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="uid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Project_Comment" Member="Project" ThisKey="project_id" OtherKey="Id" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Project" Member="Projects">
+    <Type Name="Project">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="discription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="studentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="categoryId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="avg_Rating" Type="System.Double" DbType="Float" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="publishDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="videolink" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="filelink" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Project_Rating" Member="Ratings" ThisKey="Id" OtherKey="projectid" Type="Rating" />
+      <Association Name="Project_Comment" Member="Comments" ThisKey="Id" OtherKey="project_id" Type="Comment" />
+      <Association Name="user_Project" Member="user" ThisKey="studentId" OtherKey="Id" Type="user" IsForeignKey="true" />
+      <Association Name="eventCategory_Project" Member="eventCategory" ThisKey="categoryId" OtherKey="Id" Type="eventCategory" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
